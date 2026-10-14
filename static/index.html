@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NeonStock | Inventory Management</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <a class="brand" href="/">
+            <span class="brand-icon">N</span>
+            <span>NEON<span class="cyan">STOCK</span>
+                <small>INVENTORY SYSTEM</small>
+            </span>
+        </a>
+
+        <div class="nav-heading">WORKSPACE</div>
+
+        <nav class="navigation">
+            <a href="#dashboard" class="nav-item active">
+                <span>◈</span> Dashboard
+            </a>
+
+            <a href="#inventory" class="nav-item">
+                <span>▤</span> Inventory
+            </a>
+
+            <a href="#add-product" class="nav-item">
+                <span>＋</span> Add Product
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="connection-indicator"></div>
+            <div>
+                <strong>System Online</strong>
+                <small>Inventory database connected</small>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="dashboard">
+
+        <header class="topbar">
+
+            <div>
+                <div class="eyebrow">INVENTORY MANAGEMENT / OVERVIEW</div>
+                <h1>Dashboard<span class="title-dot">.</span></h1>
+                <p class="muted">Manage your inventory with clarity and control.</p>
+            </div>
+
+            <div class="topbar-actions">
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    LIVE SYSTEM
+                </div>
+
+                <button class="primary-btn" id="headerAddBtn" type="button">
+                    <span>＋</span> Add Product
+                </button>
+
+                <div class="profile-avatar">NS</div>
+            </div>
+
+        </header>
+
+
+        <!-- STATISTICS -->
+        <section class="stats-grid">
+
+            <article class="stat-card cyan-card">
+                <div class="stat-card-top">
+                    <span>Total Products</span>
+                    <span class="stat-icon">▤</span>
+                </div>
+
+                <div class="stat-value" id="totalProducts">0</div>
+                <div class="stat-footer">
+                    <span class="accent-cyan">●</span> Unique products in inventory
+                </div>
+                <div class="card-glow"></div>
+            </article>
+
+            <article class="stat-card purple-card">
+                <div class="stat-card-top">
+                    <span>Total Stock Units</span>
+                    <span class="stat-icon">▦</span>
+                </div>
+
+                <div class="stat-value" id="totalUnits">0</div>
+                <div class="stat-footer">
+                    <span class="accent-purple">●</span> Units across all products
+                </div>
+                <div class="card-glow"></div>
+            </article>
+
+            <article class="stat-card green-card">
+                <div class="stat-card-top">
+                    <span>Inventory Value</span>
+                    <span class="stat-icon">₹</span>
+                </div>
+
+                <div class="stat-value" id="inventoryValue">₹0.00</div>
+                <div class="stat-footer">
+                    <span class="accent-green">●</span> Total stock valuation
+                </div>
+                <div class="card-glow"></div>
+            </article>
+
+            <article class="stat-card orange-card">
+                <div class="stat-card-top">
+                    <span>Low Stock Alerts</span>
+                    <span class="stat-icon">⚠</span>
+                </div>
+
+                <div class="stat-value" id="lowStock">0</div>
+                <div class="stat-footer">
+                    <span class="accent-orange">●</span> Products with 5 or fewer units
+                </div>
+                <div class="card-glow"></div>
+            </article>
+
+        </section>
+
+
+        <!-- LOW STOCK ALERT -->
+        <div id="alert" class="alert-banner" hidden></div>
+
+
+        <!-- INVENTORY SECTION -->
+        <section class="panel" id="inventory">
+
+            <div class="section-header">
+                <div>
+                    <div class="eyebrow">PRODUCT MANAGEMENT</div>
+                    <h2>Inventory Overview</h2>
+                    <p class="muted">Search, monitor and manage your products.</p>
+                </div>
+
+                <div class="inventory-count">
+                    <span class="live-dot"></span>
+                    <span id="productCount">0</span> records
+                </div>
+            </div>
+
+            <div class="toolbar">
+
+                <div class="search-wrapper">
+                    <span class="search-icon">⌕</span>
+                    <input
+                        id="search"
+                        type="search"
+                        placeholder="Search name, category or ID..."
+                        autocomplete="off"
+                    >
+                    <span class="search-shortcut">LIVE</span>
+                </div>
+
+                <button class="secondary-btn" id="refreshBtn" type="button">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Details</th>
+                            <th>Category</th>
+                            <th>Stock Level</th>
+                            <th>Unit Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="rows"></tbody>
+                </table>
+
+                <div id="empty" class="empty-state" hidden>
+                    <div class="empty-icon">▤</div>
+                    <h3>No products found</h3>
+                    <p>Your inventory records will appear here.</p>
+                </div>
+
+            </div>
+
+            <div class="table-footer">
+                <span>DATABASE STATUS <strong class="accent-green">● Connected</strong></span>
+                <span>LOW STOCK THRESHOLD <strong>≤ 5 UNITS</strong></span>
+            </div>
+
+        </section>
+
+
+        <!-- ADD PRODUCT FORM -->
+        <section class="panel add-panel" id="add-product">
+
+            <div class="section-header">
+                <div>
+                    <div class="eyebrow">INVENTORY OPERATIONS</div>
+                    <h2>Add New Product</h2>
+                    <p class="muted">Enter the details below to add an item.</p>
+                </div>
+
+                <div class="form-icon">＋</div>
+            </div>
+
+            <form id="add-form">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="name">PRODUCT NAME <span>*</span></label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="e.g. Wireless Headphones"
+                            maxlength="120"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">CATEGORY <span>*</span></label>
+                        <input
+                            id="category"
+                            name="category"
+                            type="text"
+                            placeholder="e.g. Electronics"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">INITIAL QUANTITY <span>*</span></label>
+                        <input
+                            id="quantity"
+                            name="quantity"
+                            type="number"
+                            min="0"
+                            step="1"
+                            placeholder="Enter stock quantity"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">PRICE PER UNIT (₹) <span>*</span></label>
+                        <input
+                            id="price"
+                            name="price"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <div id="form-error" class="form-error" role="alert"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn" id="submitBtn">
+                        <span>＋</span> Add to Inventory
+                    </button>
+
+                    <button type="reset" class="secondary-btn">
+                        Clear Form
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <footer class="page-footer">
+            <div><span class="footer-logo">NEONSTOCK</span> INVENTORY MANAGEMENT SYSTEM</div>
+            <div>BUILT FOR SMARTER INVENTORY CONTROL <span class="accent-cyan">✦</span></div>
+        </footer>
+
+    </main>
+
+</div>
+
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="/app.js"></script>
+
+</body>
+</html>
